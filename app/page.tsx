@@ -14,7 +14,21 @@ export default function ImageGallery() {
     if (selectedRatings.length === 0) {
       return []
     }
-    return data.filter(review => selectedRatings.includes(review["Review Score"]))
+    
+    // Get regular filtered reviews
+    const regularReviews = data.filter(review => 
+      selectedRatings.includes(review["Review Score"]) && 
+      !review["Product ID"].includes("GHDR")
+    )
+    
+    // Get GHDR product reviews
+    const ghdrReviews = data.filter(review => 
+      selectedRatings.includes(review["Review Score"]) && 
+      review["Product ID"].includes("GHDR")
+    )
+    
+    // Return regular reviews first, then GHDR reviews at the bottom
+    return [...regularReviews, ...ghdrReviews]
   }, [selectedRatings])
 
   return (
